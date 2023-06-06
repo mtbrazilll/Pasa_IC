@@ -34,7 +34,7 @@ Variáveis binárias:
 - zs,h - indica que a sala s ∈ S é utilizada no intervalo h ∈ H ∪ H^1
 - ys,h - indica que a sala s ∈ S é aberta do intervalo h ∈ H ∪ H^1 para o intervalo h+1
 
-Apresenta-se, a seguir, o modelo de programação linear inteira para minimização da soma da quantidade de vezes que as salas são abertas:
+Apresenta-se, a seguir, o modelo de programação linear inteira:
 
 ![Equação 1](pli.png)
 
