@@ -12,16 +12,100 @@ O trabalho foi desenvolvido com base na alocação de salas de aulas para o per�
 
 O repositório está organizado da seguinte maneira:
 
-- `code/`: Esta pasta contém os arquivos com o código fonte do modelo de programação linear inteira desenvolvido. 
-- `data/`: Nesta pasta, são armazenados os dados utilizados como entrada para o modelo, incluindo a alocação de salas de aula do período letivo 2021.2.
+- `cplex/`: Esta pasta contém os arquivos com o código fonte do modelo de programação linear inteira desenvolvido. 
+- `instância/alocacao-professor-20212_EC_CC-v28/`: Nesta pasta, mostra a alocação de salas de aula do período letivo 2021.2.
 - `docs/`: Aqui encontram-se os documentos e arquivos de documentação relacionados ao trabalho, incluindo manuais, especificações técnicas e relatórios de resultados.
-- `results/`: Esta pasta armazena os resultados obtidos a partir da resolução do modelo proposto, bem como os resultados comparativos com a solução atualmente utilizada pelo instituto.
+- `solução/alocacao-professor-20212_EC_CC-v28/`: Esta pasta armazena os resultados obtidos a partir da resolução do modelo proposto.
 - `README.md`: Este arquivo contém informações gerais sobre o repositório e as instruções para utilização.
 
-## Utilização
+## Tabela de Salas do IC
 
-Para utilizar o modelo de programação linear inteira proposto neste trabalho, siga as etapas a seguir:
+A tabela a seguir apresenta as salas disponíveis no Instituto de Computação (IC) e seus respectivos usos:
 
-1. Clone este repositório para o seu ambiente local:
-   ```bash
-   git clone https://github.com/seu-usuario/nome-do-repositorio.git
+| Sala               | Uso           |
+|--------------------|---------------|
+| Auditório          | Aula Teórica  |
+| Lab 02             | Misto         |
+| Lab 03             | Misto         |
+| Sala 02            | Aula Teórica  |
+| Sala 03            | Aula Teórica  |
+| Lab Robótica       | Aula Prática  |
+| Sala 204 Bloco 12  | Aula Teórica  |
+| Sala 205 Bloco 12  | Aula Teórica  |
+| Sala 206 Bloco 12  | Aula Teórica  |
+| Sala 207 Bloco 12  | Aula Teórica  |
+| Mini sala 01       | Aula Teórica  |
+| Lab Controle       | Aula Prática  |
+| Lab 01 Bloco 12    | Aula Prática  |
+| Auditório CEPETEC  | Aula Teórica  |
+| Lab Eletrônica     | Aula Prática  |
+| Lab 01 AB          | Misto         |
+
+## Formulação
+
+Definições dos conjuntos usados:
+
+- T = {1, 2, ..., Tn} - Turmas
+- S = {1, 2, ..., Sn} - Salas
+- H = {1, 2, ..., Hn} - Intervalos de tempo
+- H^1 ⊆ H - Horários fictícios
+- H^2 = H - {Hn}
+- CH_h ⊆ T - Conflito de horários das turmas do intervalo h ∈ H
+
+Variáveis binárias:
+
+- xs,t - indica que a turma t ∈ T é alocada à sala s ∈ S
+- zs,h - indica que a sala s ∈ S é utilizada no intervalo h ∈ H ∪ H^1
+- ys,h - indica que a sala s ∈ S é aberta do intervalo h ∈ H ∪ H^1 para o intervalo h+1
+
+Apresenta-se, a seguir, o modelo de programação linear inteira para minimização da soma da quantidade de vezes que as salas são abertas:
+
+2 / 2
+
+Aqui está o trecho adicionado ao README, que inclui a seção "Formulação" com as definições dos conjuntos e o modelo de programação linear inteira:
+
+markdown
+
+## Formulação
+
+Definições dos conjuntos usados:
+
+- T = {1, 2, ..., Tn} - Turmas
+- S = {1, 2, ..., Sn} - Salas
+- H = {1, 2, ..., Hn} - Intervalos de tempo
+- H^1 ⊆ H - Horários fictícios
+- H^2 = H - {Hn}
+- CH_h ⊆ T - Conflito de horários das turmas do intervalo h ∈ H
+
+Variáveis binárias:
+
+- xs,t - indica que a turma t ∈ T é alocada à sala s ∈ S
+- zs,h - indica que a sala s ∈ S é utilizada no intervalo h ∈ H ∪ H^1
+- ys,h - indica que a sala s ∈ S é aberta do intervalo h ∈ H ∪ H^1 para o intervalo h+1
+
+Apresenta-se, a seguir, o modelo de programação linear inteira para minimização da soma da quantidade de vezes que as salas são abertas:
+
+{\allowdisplaybreaks\begin{align}
+\min \quad & \sum_{s \in S}^{}\sum_{h \in H^{} \cup H^{1}}^{}y_{s,h} &\forall \ h \in H \cup H^{1}, \ \forall \ s \in S
+& \
+& \sum_{s \in S}^{} x_{s,t} = 1 &\forall \ t \in T\
+&\sum_{t \in CH_{h}}^{} x_{s,t} = z_{s,h} &\forall \ h \in H \cup H^{1}, \ \forall \ s \in S\
+& z_{s,h+1} - z_{s,h} \leq y_{s,h} &\forall \ s \in S, \ h \in H^{} \cup H^{1}\
+&x_{s,t} \in \left { 0,1 \right } &\forall \ s \in S, \ t \in T\
+&z_{s,h} \in \left { 0,1 \right } &\forall \ s \in S, \ h \in H \cup H^{1}\
+&y_{s,h} \in \left { 0,1 \right } &\forall \ s \in S, \ h \in H^{*} \cup H^{1}
+\end{align}}
+
+
+Nesta formulação são utilizados os horários fictícios, que precedem os primeiros horários de cada dia e os de pausa de 40 minutos. Pois, não se deve contabilizar a primeira vez que a sala é aberta a cada dia e às vezes que a sala fica muito tempo sem ser usada.
+
+Resumidamente, as restrições são:
+
+1. Função Objetivo, minimiza o número de vezes que as salas são abertas.
+2. Cada turma deve ser alocada a uma única sala.
+3. Não pode haver conflitos de horários.
+4. Relação entre a variável ys,h e zs,h.
+5. xs,t é uma variável binária.
+6. zs,h é uma variável binária.
+7. ys,h é uma variável binária.
+
