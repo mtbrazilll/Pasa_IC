@@ -17,6 +17,28 @@ O repositório está organizado da seguinte maneira:
 - `solução/alocacao-professor-20212_EC_CC-v28/`: Esta pasta armazena os resultados obtidos a partir da resolução do modelo proposto.
 - `README.md`: Este arquivo contém informações gerais sobre o repositório e as instruções para utilização.
 
+## Formulação
+
+Definições dos conjuntos usados:
+
+- T = {1, 2, ..., Tn} - Turmas
+- S = {1, 2, ..., Sn} - Salas
+- H = {1, 2, ..., Hn} - Intervalos de tempo
+- H^1 ⊆ H - Horários fictícios
+- H^2 = H - {Hn}
+- CH_h ⊆ T - Conflito de horários das turmas do intervalo h ∈ H
+
+Variáveis binárias:
+
+- xs,t - indica que a turma t ∈ T é alocada à sala s ∈ S
+- zs,h - indica que a sala s ∈ S é utilizada no intervalo h ∈ H ∪ H^1
+- ys,h - indica que a sala s ∈ S é aberta do intervalo h ∈ H ∪ H^1 para o intervalo h+1
+
+Apresenta-se, a seguir, o modelo de programação linear inteira para minimização da soma da quantidade de vezes que as salas são abertas:
+
+![Equação 1](pli.png)
+
+
 ## Tabela de Salas do IC
 
 A tabela a seguir apresenta as salas disponíveis no Instituto de Computação (IC) e seus respectivos usos:
